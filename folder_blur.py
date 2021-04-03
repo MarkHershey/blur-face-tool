@@ -23,7 +23,7 @@ def find_face_in_videos_folder(infolder: str = "/data/urop/all_videos_final"):
             continue
         filepath = infolder / file
         assert filepath.is_file()
-        if check_single_video(filepath):
+        if check_single_video(str(filepath)):
             video_filepath_list.append(filepath)
 
     return video_filepath_list
@@ -70,7 +70,7 @@ def blur_videos_list(
         else:
             logger.warning(f"Will overwrite {video_out_path}")
 
-        cmd = f'python noone_video.py --file "{video_filepath}" --out "{video_out_path}" --show 0'
+        cmd = f'python noone_video.py --file "{str(video_filepath)}" --out "{str(video_out_path)}" --show 0'
         cmds.append(cmd)
 
     return cmds
