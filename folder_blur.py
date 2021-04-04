@@ -24,7 +24,7 @@ def find_face_in_videos_folder(infolder: str = "/data/urop/all_videos_final"):
         filepath = infolder / file
         assert filepath.is_file()
         if check_single_video(str(filepath)):
-            video_filepath_list.append(filepath)
+            video_filepath_list.append(str(filepath))
 
     return video_filepath_list
 

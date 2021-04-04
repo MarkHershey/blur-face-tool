@@ -9,7 +9,7 @@ def check_single_video(video_filepath: str, batch_size: int = 3) -> bool:
     assert Path(video_filepath).is_file()
     # Open video file
     video_capture = cv2.VideoCapture(video_filepath)
-    logger.debug(f"Checking faces in: {video_filepath}")
+    # logger.debug(f"Checking faces in: {video_filepath}")
 
     frames = []
     frame_count = 0
@@ -43,6 +43,7 @@ def check_single_video(video_filepath: str, batch_size: int = 3) -> bool:
                 number_of_faces_in_frame = len(face_locations)
 
                 if number_of_faces_in_frame >= 1:
+                    logger.debug(f"YES: {video_filepath}")
                     return True
 
                 # frame_number = frame_count - BATCH_SIZE + frame_number_in_batch
