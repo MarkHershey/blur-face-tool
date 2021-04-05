@@ -11,7 +11,9 @@ from markkk.logger import logger
 from blur_single_video import check_single_video
 
 
-def find_face_in_videos_folder(infolder: str = "/data/urop/all_videos_final"):
+def find_face_in_videos_folder(
+    infolder: str = "/data/urop/all_videos_final",
+) -> List[str]:
     infolder = Path(infolder).resolve()
     assert infolder.is_dir()
 
@@ -29,7 +31,7 @@ def find_face_in_videos_folder(infolder: str = "/data/urop/all_videos_final"):
     return video_filepath_list
 
 
-def blur_videos_folder(infolder: str = "/data/urop/all_videos_final"):
+def blur_videos_folder(infolder: str = "/data/urop/all_videos_final") -> List[str]:
     infolder = Path(infolder).resolve()
     assert infolder.is_dir()
 
@@ -41,13 +43,13 @@ def blur_videos_folder(infolder: str = "/data/urop/all_videos_final"):
             continue
         filepath = infolder / file
         assert filepath.is_file()
-        video_filepath_list.append(filepath)
+        video_filepath_list.append(str(filepath))
 
     return video_filepath_list
 
 
 def blur_videos_list(
-    video_filepath_list: List[Path],
+    video_filepath_list: List[str],
     out_dir: str = "/data/urop/all_videos_final_blurred",
     overwrite: bool = False,
 ) -> List[str]:
@@ -59,6 +61,7 @@ def blur_videos_list(
     cmds = []
 
     for video_filepath in video_filepath_list:
+        video_filepath = Path(video_filepath)
         assert video_filepath.is_file()
 
         video_name = video_filepath.name

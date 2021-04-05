@@ -5,7 +5,7 @@ import face_recognition
 from markkk.logger import logger
 
 
-def check_single_video(video_filepath: str, batch_size: int = 3) -> bool:
+def check_single_video(video_filepath: str, batch_size: int = 6) -> bool:
     assert Path(video_filepath).is_file()
     # Open video file
     video_capture = cv2.VideoCapture(video_filepath)
@@ -14,14 +14,20 @@ def check_single_video(video_filepath: str, batch_size: int = 3) -> bool:
     frames = []
     frame_count = 0
     BATCH_SIZE = batch_size
+    frame_skip = 5
+    frame_idx = 0
 
     while video_capture.isOpened():
+        frame_idx += 1
         # Grab a single frame of video
         ret, frame = video_capture.read()
 
         # Bail out when the video file ends
         if not ret:
             break
+
+        if frame_idx % frame_skip != 0:
+            continue
 
         # Convert the image from BGR color (which OpenCV uses) to RGB color (which face_recognition uses)
         frame = frame[:, :, ::-1]
