@@ -69,11 +69,17 @@ def blur_videos_list(
         video_out_path = out_dir / video_name
 
         if not overwrite:
-            assert video_out_path.is_file()
+            assert not video_out_path.is_file(), f"{str(video_out_path)} already exists"
         else:
-            logger.warning(f"Will overwrite {video_out_path}")
+            if video_out_path.is_file():
+                logger.warning(f"Will overwrite {video_out_path}")
 
-        cmd = f'python noone_video.py --file "{str(video_filepath)}" --out "{str(video_out_path)}" --show 0'
+        # noone_video
+        # cmd = f'python noone_video.py --file "{str(video_filepath)}" --out "{str(video_out_path)}" --show 0'
+        # DSFD
+        # cmd = f'python blur_video.py -i "{str(video_filepath)}" -o "{str(video_out_path)}" --cuda 1'
+        # lightweight DSFD
+        cmd = f'python /home/markhuang/code/Anonymizing_video_by_lightDSFD/blur_video.py "{str(video_filepath)}" "{str(video_out_path)}" --cuda 1 --trained_model "/home/markhuang/code/Anonymizing_video_by_lightDSFD/weights/light_DSFD.pth"'
         cmds.append(cmd)
 
     return cmds
@@ -87,6 +93,7 @@ def execute_cmd(cmd: str):
 
 if __name__ == "__main__":
     face_video_list_fp = Path("video_filepath_list.json")
+    face_video_list_fp = Path("test_run.json")
 
     if face_video_list_fp.is_file():
         with face_video_list_fp.open() as f:
@@ -97,7 +104,7 @@ if __name__ == "__main__":
         with face_video_list_fp.open(mode="w") as f:
             json.dump(video_filepath_list, f, indent=4)
 
-    cmds = blur_videos_list(video_filepath_list)
+    cmds = blur_videos_list(video_filepath_list, overwrite=True)
 
     _x = str(input("Submit job list to multiprocessing pool? (y/n)")).strip()
     if _x.lower() != "y":
